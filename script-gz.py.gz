@@ -1,0 +1,27 @@
+import os
+
+def add_gz_to_filenames(directory):
+    """
+    Recursively adds the `.gz` suffix to filenames in the given directory that do not already have it.
+
+    Args:
+        directory (str): Path to the directory to process.
+    """
+    for root, _, files in os.walk(directory):
+        for file in files:
+            if not file.endswith(".gz"):
+                old_path = os.path.join(root, file)
+                new_path = os.path.join(root, file + ".gz")  # Add '.gz' suffix
+                try:
+                    os.rename(old_path, new_path)
+                    print(f"Renamed: {old_path} -> {new_path}")
+                except OSError as e:
+                    print(f"Error renaming {old_path}: {e}")
+
+if __name__ == "__main__":
+    # Replace 'your_directory_path_here' with the path of the directory you want to process
+    directory_to_process = "/home/farhad/project/opentelemetry"
+    if os.path.isdir(directory_to_process):
+        add_gz_to_filenames(directory_to_process)
+    else:
+        print(f"Error: {directory_to_process} is not a valid directory.")

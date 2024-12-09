@@ -1,0 +1,48 @@
+
+services:
+  users-service:
+    build:
+      context: ./users_service
+    ports:
+      - "8000:8000"
+    depends_on:
+      - jaeger  
+    networks:
+      - ecommerce-network
+    command: >
+      sh -c "python manage.py makemigrations &&
+             python manage.py migrate &&
+             opentelemetry-instrument --traces_exporter jaeger python manage.py runserver 0.0.0.0:8000"
+    environment:
+      - OTEL_TRACES_EXPORTER=jaeger
+      - OTEL_EXPORTER_JAEGER_AGENT_HOST=jaeger
+      - OTEL_EXPORTER_JAEGER_AGENT_PORT=6831
+      - OTEL_RESOURCE_ATTRIBUTES=service.name=users-service
+
+  orders-service:
+    build:
+      context: ./orders_service
+    ports:
+      - "8001:8000"
+    depends_on:
+      - jaeger  
+    networks:
+      - ecommerce-network
+    command: >
+      sh -c "python manage.py makemigrations &&
+             python manage.py migrate &&
+             opentelemetry-instrument --traces_exporter jaeger python manage.py runserver 0.0.0.0:8000"
+    environment:
+      - OTEL_TRACES_EXPORTER=jaeger
+      - OTEL_EXPORTER_JAEGER_AGENT_HOST=jaeger
+      - OTEL_EXPORTER_JAEGER_AGENT_PORT=6831
+      - OTEL_RESOURCE_ATTRIBUTES=service.name=orders-service
+
+  jaeger:
+    image: jaegertracing/all-in-one:1.41
+    ports:
+      - "6831:6831/udp"
+      - "16686:16686"
+
+networks:
+  ecommerce-network:
