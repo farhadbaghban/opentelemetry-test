@@ -11,8 +11,14 @@ import os
 from django.core.wsgi import get_wsgi_application
 
 from opentelemetry.instrumentation.django import DjangoInstrumentor
+from .otel_setting import setup_tracing
+from .jeager_tracing import setup_jaeger_tracing
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'test_open_order.settings')
+# Initialize Jaeger tracing
+setup_jaeger_tracing()
+setup_tracing("TestOpenOrder")
+
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "test_open_order.settings")
 
 # Instrument Django with OpenTelemetry
 DjangoInstrumentor().instrument()

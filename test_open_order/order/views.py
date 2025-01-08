@@ -6,6 +6,7 @@ from .models import Order, OrderItem
 from rest_framework import serializers
 from opentelemetry import trace
 
+from opentelemetry.trace import SpanKind
 tracer = trace.get_tracer("django-app")
 
 
@@ -30,11 +31,12 @@ class OrderListCreateView(APIView):
         Fetch user data from the external service using the user ID.
         """
         try:
-            # Assuming the user service returns a user with id and firstname
-            response = requests.get(f"{USER_SERVICE_URL}/{user_id}")
-            response.raise_for_status()
-            user_data = response.json()
-            return user_data
+            with tracer.start_as_current_span("get_user_from_service", kind=SpanKind.CLIENT) :
+                # Assuming the user service returns a user with id and firstname
+                response = requests.get(f"{USER_SERVICE_URL}/{user_id}")
+                response.raise_for_status()
+                user_data = response.json()
+                return user_data
         except requests.exceptions.RequestException as e :
             return Response(f"error: {str(e)}",status=status.HTTP_400_BAD_REQUEST)
         except Exception as e :
@@ -54,10 +56,13 @@ class OrderListCreateView(APIView):
         """
         Create a new order. User data is fetched from the external service.
         """
-        with tracer.start_as_current_span("order_post_span"):
+        with tracer.start_as_current_span("order_post_span") as span:
 
             user_id = request.data.get("user_id")
             user_data = self.get_user_from_service(user_id)
+            span.set_attribute("user_id",user_id)
+            for item in user_data:
+                span.set_attribute(f"user_data : {item}",user_data[item])
 
             if not user_data:
                 return Response(
