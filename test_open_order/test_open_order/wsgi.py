@@ -16,7 +16,7 @@ from .jeager_tracing import setup_jaeger_tracing
 
 # Initialize Jaeger tracing
 setup_jaeger_tracing()
-setup_tracing("TestOpenOrder")
+setup_tracing()
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "test_open_order.settings")
 

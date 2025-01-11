@@ -1,5 +1,5 @@
 """
-WSGI config for test_open project.
+WSGI config for test_trip project.
 
 It exposes the WSGI callable as a module-level variable named ``application``.
 
@@ -14,11 +14,12 @@ from opentelemetry.instrumentation.django import DjangoInstrumentor
 from .otel_setting import setup_tracing
 from .jeager_tracing import setup_jaeger_tracing
 
+
 # Initialize Jaeger tracing
 setup_jaeger_tracing()
 setup_tracing()
 
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "test_open.settings")
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'test_trip.settings')
 
 # Instrument Django with OpenTelemetry
 DjangoInstrumentor().instrument()

@@ -1,0 +1,14 @@
+{
+  "user_id": 2,
+  "order_id": 2,
+  "pickup_location": {
+    "latitude": 37.02,
+    "longitude": 53.9,
+    "address": "Nowhere"
+  },
+  "dropoff_location": {
+    "latitude": 53.02,
+    "longitude": 38.9,
+    "address": "Nowhere too"
+  }
+}
