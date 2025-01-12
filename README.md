@@ -3,7 +3,9 @@
 This repository is designed to test and implement OpenTelemetry with Django. It contains two Django projects:  
 
 - **test_open**: Handles user authentication.  
-- **test_open_order**: Manages `Order` and `OrderItem` models and integrates with `test_open` for user information.  
+- **test_open_order**: Manages `Order` and `OrderItem` models and integrates with `test_open` for user information.
+- **test_trip**: Manages `Trip` model and integrates with `test_open` for user information and `test_open_order` for orders.
+- **consumer**: Manages the `RequestResponse` model and consumes from services for logging data.  
 
 The repository includes migration files, and it is essential to migrate the database before running the projects.
 
@@ -87,6 +89,8 @@ The Consumer server will be accessible at http://127.0.0.1:8004.
 ## Usage
         Use test_open for user authentication services.
         Manage orders and items in the test_open_order project.
+        Manages Trips and integrates with `test_open` for user information and `test_open_order` for orders.
+        Manages the `RequestResponse` and consumes from services for logging data.  
         Trace request flows using OpenTelemetry with Jaeger to monitor interactions.
         OpenTelemetry and Jaeger.
 
