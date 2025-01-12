@@ -18,6 +18,12 @@ The repository includes migration files, and it is essential to migrate the data
 3. **OpenTelemetry Integration**:  
    OpenTelemetry is implemented to trace requests and interactions across the projects.
 
+4. **Trip Management**:  
+   The `test_trip` project includes models for Trips, that create trips with some required data and call User and Order services.
+
+3. **Consumer**:  
+   The `consumer` project includes models for Request and Response dataLOG and consumes data from a RabbitMQ queue with a django command.
+
 ## Requirements
 
 - Python 3.8+  
@@ -75,6 +81,8 @@ python manage.py runserver
 ```
 The User server will be accessible at http://127.0.0.1:8000.
 The Order server will be accessible at http://127.0.0.1:8001.
+The Trip server will be accessible at http://127.0.0.1:8002.
+The Consumer server will be accessible at http://127.0.0.1:8004.
 
 ## Usage
         Use test_open for user authentication services.
@@ -87,6 +95,14 @@ The Order server will be accessible at http://127.0.0.1:8001.
 ### Notes
 Ensure Docker is installed and running before starting Jaeger.
 Migration files are included in the repository. Run python manage.py migrate before using the application.
+
+
+### 6. Run RabbiyMQ in the Background
+To enable services for produce and consume data on RabbitMQ instance using Docker:
+
+```bash
+docker run -d --name rabbitmq -p 5672:5672 -p 15672:15672 rabbitmq:4.0.5-alpine
+```
 
 ### License
 This repository is for testing purposes and is not intended for production use.
